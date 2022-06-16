@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <style>
+    .navbar {
+      background-color: #131921;
+    }
+  </style>
+  <title>Amazon</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-light">
+    <a class="navbar-brand">
+      <img src="./logo.png" height="36px" />
+    </a>
+    <a class="text-light" href="/back.html">Back Office</a>
+  </nav>
+  <div class="container">
+    <h1 class="mt-5">Products</h1>
+    <hr />
+    <div class="card-columns"></div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+    crossorigin="anonymous"></script>
+
+  <script>
+    const BASE_URL = "https://striveschool-api.herokuapp.com/api/product";
+    const headers = new Headers({
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmE5OTYxYTAxNjBiNTAwMTU1YmI0ODAiLCJpYXQiOjE2NTUyODM5MTcsImV4cCI6MTY1NjQ5MzUxN30.plJJNaN5rqCldXpDWHtXfaFbRYtwzzJt-ORahLmhnuM",
+    });
+    const getProducts = (callback) => {
+      fetch(BASE_URL, { headers })
+        .then((res) => res.json())
+        .then((data) => callback(null, data))
+        .catch((error) => callback(error, null));
+    };
+    window.onload = function () {
+      getProducts((error, data) => {
+        console.log(data, error)
+        if (error) {
+          console.log({ error });
+        } else {
+          const content = document.querySelector(".card-columns");
+          content.innerHTML = "";
+          data.forEach((product) => {
+            content.innerHTML += `<div class="card">
+          <img src="${product.imageUrl}" class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h5 class="card-title">${product.name}</h5>
+            <p class="card-text">
+               ${product.description}
+            </p>
+          </div>
+        </div>`;
+          });
+        }
+      });
+    };
+  </script>
+</body>
+
+</html>
